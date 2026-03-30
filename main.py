@@ -1,22 +1,27 @@
 from models.expense import Expense
 from services.tracker import ExpenseTracker
+from utils.input_helper import *
 
 traker = ExpenseTracker()
 
 while True:
-    print("-" * 30)
-    action = int(input("""Select operation :
-    1. Add expense
-    2. Display expenses
-    3. Exit
-    Enter choice : """))
-    print("-" * 30)
+    try:
+        print("-" * 30)
+        action = int(input("""Select operation :
+        1. Add expense
+        2. Display expenses
+        3. Exit
+        Enter choice : """))
+        print("-" * 30)
+    except ValueError:
+        print('Please Enter the Number of you choise :')
+        continue
     if action == 1:
-        expense_id = int(input('Enter Expense ID : '))
-        date = input("Enter Date : ")
-        amount = int(input('Enter the Amount : '))
-        reason = input('State the reason : ')
-        paid_by = input('Who paid? : ')
+        expense_id = get_int_input('Enter the Expense ID : ')
+        date = get_string_input('Enter Date :')
+        amount = get_int_input('Enter the Amount : ')
+        reason = get_string_input('State the reason : ')
+        paid_by = get_string_input('Who paid? : ')
 
         expense = Expense(expense_id,date,amount,reason,paid_by)
 
