@@ -1,6 +1,8 @@
 from models.expense import Expense
 from services.tracker import ExpenseTracker
 from utils.input_helper import *
+import display 
+
 
 traker = ExpenseTracker()
 
@@ -31,7 +33,7 @@ while True:
 
 
     elif action == 2:
-        traker.display_expenses()
+        trackr.display_expenses()
 
     else:
         break
