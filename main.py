@@ -3,7 +3,7 @@
 def add_expense(amount,category,expenses):
     expense = {'amount':amount , 'category':category}
     expenses.append(expense)
-    return expenses
+
 
 def display_expenses(expenses):
     if not expenses:
