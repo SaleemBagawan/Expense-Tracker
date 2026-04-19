@@ -1,88 +1,108 @@
+class Expense:
 
+    def __init__(self,amount,category):
+        self.amount = amount
+        self.category = category
 
-def add_expense(amount,category,expenses):
-    expense = {'amount':amount , 'category':category}
-    expenses.append(expense)
+class ExpenseManager:
 
+    def __init__(self):
+        self.expenses= []
+    
+    def add_expense(self,amount, category):
+        if amount <=0 :
+            raise ValueError('Invalid amount')
+        if not category:
+            raise ValueError('Category can not be empty.')
+        expense = Expense(amount, category)
+        self.expenses.append(expense)
 
-def display_expenses(expenses):
-    if not expenses:
-        print("No expense found")
-        return 
-    for record in expenses:
-        print(f"Amount : {record['amount']}  Category : {record['category']}")
-
-def calculate_total(expenses):
-    total = 0
-    for record in expenses:
-        total += record['amount']
-
-    return total
-
-
-def display_expenses_above(limit,expenses):
-    found = False
-    for record in expenses:
-        if record['amount'] >= limit:
-            found = True
-            print(f"Amount : {record['amount']}  Category : {record['category']}")
-
-    if not found:
-        print("No record found")
+    def get_expenses(self):
+        return self.expenses
         
+    def calculate_total(self):
+        total = 0
+        for expense in self.expenses:
+            total += expense.amount
+        return total
+    
+    def display_above_limit(self,limit):
+        return [e for e in self.expenses if e.amount >= limit]
+
+    
+    
+def main():
+
+    manager = ExpenseManager()
+    
+    while True:
+        print('*' * 40)
+        try:
+            choice = int(input("""
+            1. Add expense
+            2. Display expenses
+            3. Display Total
+            4. Display above limit
+            5. Exit
+            Please select the operation (1/2/3/4/5) :"""))
+        except ValueError:
+            print('Please enter valid operation:')
+            continue
+        
+        print('*' * 40)
+
+        if choice == 1:
+            amount = get_int_input('Enter amount:')
+            category = get_string_input('Enter Category : ')
+            try:
+                manager.add_expense(amount, category)
+                print('Expense added successfully')
+            except ValueError as e:
+                print(e)
+
+        elif choice == 2:
+            data = manager.get_expenses()
+            if not data:
+                print('No record found')
+                continue
+            for expense in data:
+                print(f'Amount : {expense.amount}  Category : {expense.category}')
+
+        
+        elif choice == 3:
+            print(f'Total = {manager.calculate_total()}')
+
+        elif choice == 4:
+            limit = get_int_input('Enter the limit:')
+            data = manager.display_above_limit(limit)
+            if not data:
+                print('No data found')
+                continue
+            for entry in data:
+                print(f'Amount : {entry.amount}  Category : {entry.category}')
+            
+            
+        else:
+            break
+    
+
+
+
 def get_int_input(text):
     while True:
         try:
             return int(input(text))
         except ValueError:
-            print('please enter valid Number:')
+            print('Please enter a valid number.')
 
 def get_string_input(text):
     while True:
-        data = input(text)
-        if not data:
-            print('Enter can not be empty, please enter valid entry')
+        value = input(text)
+        if not value:
+            print('Please enter something:')
         else:
-            return data
+            return value
     
 
-
-
-def main ():
-    expenses = []
-
-    while True:
-        print('*' * 20)
-        print('Please select the Operation :')
-        try:
-            choice = int(input("""
-            1) Add expense
-            2) Display expenses
-            3) Disply total
-            4) Disply expense above the limit
-            5) Exit
-            Please enter the choice (1/2/3/4/5) : """))
-        except ValueError:
-            print("Please enter a valid choice:")
-            continue
-        print('*' * 20)
-
-        if choice == 1:
-            amount = get_int_input('Please enter the amount:')
-            category = get_string_input('Please enter the category:')
-            add_expense(amount,category,expenses)
-            print('Expense added successfully:')
-        elif choice == 2:
-            display_expenses(expenses)
-        elif choice == 3:
-            print(f'Total expense = {calculate_total(expenses)}')
-        elif choice == 4:
-            limit = get_int_input('Enter the limit:')
-            display_expenses_above(limit,expenses)
-        else:
-            break
-
-main()
-
-
-
+if __name__ == "__main__":
+    main()
