@@ -15,7 +15,8 @@ def main():
             3. Display Total
             4. Display above limit
             5. Display total by category
-            6. Exit
+            6. Delete Expense 
+            7. Exit
             Please select the operation (1/2/3/4/5/6) :"""))
         except ValueError:
             print('Please enter valid operation:')
@@ -37,8 +38,8 @@ def main():
             if not data:
                 print('No record found')
                 continue
-            for expense in data:
-                print(f'Index : {expense.index}  Amount : {expense.amount}  Category : {expense.category}')
+            for index in range(len(data)):
+                print(f'{index} --> Amount : {data[index].amount} | Category : {data[index].category}')
 
         
         elif choice == 3:
@@ -50,13 +51,21 @@ def main():
             if not data:
                 print('No data found')
                 continue
-            for entry in data:
-                print(f'Index : {entry.index}  Amount : {entry.amount}  Category : {entry.category}')
+            for index in range(len(data)):
+                print(f'{index} --> Amount : {data[index].amount} | Category : {data[index].category}')
 
         elif choice == 5:
             category = get_string_input('Enter the Category: ')
             data = manager.get_expenses_by_category(category)
             print(f'The Total amount for category {category} is {data}')
+        
+        elif choice == 6:
+            index = get_int_input('Enter the index of the expense :')
+            
+            if not manager.delet_by_index(index):
+                print('Index does not exists.')
+            else:
+                print('Expense deleted successfully.')
             
             
         else:

@@ -34,6 +34,13 @@ class ExpenseManager:
     def get_expenses_by_category(self,category):
         data = [c for c in self.expenses if c.category == category]
         return self.calculate_total(data)
+    
+    def delet_by_index(self,index):
+        if 0 <= index <= len(self.expenses):
+            del self.expenses[index]
+            return True
+        return False
+    
 
 
 
