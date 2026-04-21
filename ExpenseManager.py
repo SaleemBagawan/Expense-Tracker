@@ -41,6 +41,30 @@ class ExpenseManager:
             return True
         return False
     
+    def edit_expense(self, index , amount = None , category = None):
+
+        if not self.expenses:
+            return False, 'No data found'
+        
+        if index >= len(self.expenses) or index < 0:
+            return False , 'Invalid index'
+        
+        if amount is None and category is None:
+            return False, 'No changes Provided.'
+        
+        expense = self.expenses[index]
+        
+        if amount is not None:
+            expense.amount = amount
+            
+        if category is not None:
+            expense.category = category
+
+        return True , 'Expense updated successfully.'
+    
+       
+        
+    
 
 
 
