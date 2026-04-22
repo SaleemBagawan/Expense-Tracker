@@ -1,1 +1,12 @@
-[{"amount": 5000, "category": "Shopping"}, {"amount": 2000, "category": "Food"}]
+[
+    {
+        "expense_id": 1,
+        "amount": 100,
+        "category": "food"
+    },
+    {
+        "expense_id": 2,
+        "amount": 90,
+        "category": "food"
+    }
+]
