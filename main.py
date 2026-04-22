@@ -5,7 +5,7 @@ from utils import *
 def main():
 
     manager = ExpenseManager()
-    
+    manager.load_from_file()
     while True:
         print('*' * 40)
         try:
@@ -31,6 +31,7 @@ Please select the operation (1/2/3/4/5/6) :"""))
             try:
                 manager.add_expense(amount, category)
                 print('Expense added successfully')
+                
             except ValueError as e:
                 print(e)
         elif choice == 2:
@@ -60,6 +61,7 @@ Please select the operation (1/2/3/4/5/6) :"""))
                 print('Index does not exists.')
             else:
                 print('Expense deleted successfully.')
+            
         elif choice == 7:
             data = {}
             index = get_int_input('Enter the index of expense : ')
@@ -74,7 +76,6 @@ Select option (1/2/3) : """))
             except ValueError:
                 print('Invalid number:')
                 continue
-            
             if option == 1:
                 amount = get_int_input('Enter the new amount :')
                 status, massage = manager.edit_expense(index,amount = amount)
@@ -91,7 +92,8 @@ Select option (1/2/3) : """))
                 print(f'{status} : {massage}')
 
             else:
-                print('Invalid option')       
+                print('Invalid option')
+            
         else:
             break 
 

@@ -1,7 +1,7 @@
 from Expense import *
-class ExpenseManager:
+import json
 
-    
+class ExpenseManager:
 
     def __init__(self):
         self.expenses= []
@@ -14,6 +14,7 @@ class ExpenseManager:
         expense = Expense(amount, category)
         
         self.expenses.append(expense)
+        self.save_to_file()
 
     def get_all_expenses(self):
         datalist = self.expenses.copy()
@@ -38,6 +39,7 @@ class ExpenseManager:
     def delet_by_index(self,index):
         if 0 <= index <= len(self.expenses):
             del self.expenses[index]
+            self.save_to_file()
             return True
         return False
     
@@ -60,7 +62,24 @@ class ExpenseManager:
         if category is not None:
             expense.category = category
 
+        self.save_to_file()
+
         return True , 'Expense updated successfully.'
+    
+    def save_to_file(self,filename='expenses.json'):
+        data = [expense.to_dict() for expense in self.expenses]
+
+        with open(filename,'w') as f:
+            json.dump(data,f)
+        
+    def load_from_file(self,filename='expenses.json'):
+        try :
+            with open(filename,'r') as f:
+                data=json.load(f)
+                self.expenses=[Expense.from_dict(item) for item in data]
+        except FileNotFoundError:
+            self.expenses = []
+        
     
        
         
