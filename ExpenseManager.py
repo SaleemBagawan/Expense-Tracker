@@ -1,4 +1,5 @@
 from Expense import *
+from utils import validate_date
 import json
 
 class ExpenseManager:
@@ -7,14 +8,21 @@ class ExpenseManager:
         self.expenses= []
         self.next_id = 1
     
-    def add_expense(self,amount, category):
+    def add_expense(self,date,amount, category,paid_by,payment_mode):
         if amount <=0 :
             raise ValueError('Invalid amount')
         if not category:
             raise ValueError('Category can not be empty.')
+        if not paid_by:
+            raise ValueError('paid_by can not be empty')
+        if not payment_mode:
+            raise ValueError('Mode can not be empty.')
+        date = validate_date(date)
+        if not date:
+            raise ValueError('Invalid date')
         
         expense_id = self.next_id
-        expense = Expense(expense_id,amount, category)
+        expense = Expense(expense_id,date,amount, category,paid_by,payment_mode)
         
         self.expenses.append(expense)
         self.next_id += 1
@@ -54,14 +62,14 @@ class ExpenseManager:
             return True
         return False
     
-    def edit_expense(self, expense_id , amount = None , category = None):
+    def edit_expense(self, expense_id , amount = None , category = None , date = None , paid_by = None, payment_mode = None):
 
         expense = self.get_expense_by_id(expense_id)
 
         if expense is None:
             return False, 'Invalid ID'
         
-        if amount is None and category is None:
+        if amount is None and category is None and date is None and paid_by is None and payment_mode is None:
             return False, 'No changes Provided.'
         
 
@@ -74,6 +82,21 @@ class ExpenseManager:
             if not category:
                 raise ValueError('Category can not be empty.')
             expense.category = category
+
+        if date is not None:
+            date = validate_date(date)
+            if not date:
+                raise ValueError('Invalid date')
+            expense.date = date
+
+        if paid_by is not None:
+            if not paid_by:
+                raise ValueError('paid_by can not be empty')
+            expense.paid_by = paid_by
+        if payment_mode is not None:
+            if not payment_mode:
+                raise ValueError('Mode can not be empty.')
+            expense.payment_mode = payment_mode
 
         self.save_to_file()
 
@@ -89,12 +112,23 @@ class ExpenseManager:
         try :
             with open(filename,'r') as f:
                 data=json.load(f)
-                self.expenses=[Expense.from_dict(item) for item in data]
+                self.expenses=[Expense.from_dict(self.validate_data(item)) for item in data]
         except FileNotFoundError:
             self.expenses = []
 
         if self.expenses:
             self.next_id = max(expense.expense_id for expense in self.expenses) + 1
+        
+    def validate_data(self,item):
+        if not item.get('date',0):
+            item['date'] = "01-10-0001"
+        if not item.get('paid_by',0):
+            item['paid_by'] = "Unknown"
+        if not item.get('payment_mode',0):
+            item['payment_mode'] = "Unknown"
+        
+        return item
+
         
     
        

@@ -1,12 +1,50 @@
 [
     {
         "expense_id": 1,
+        "date": "28-01-2022",
         "amount": 100,
-        "category": "food"
+        "category": "food",
+        "paid_by": "Unknown",
+        "payment_mode": "Unknown"
     },
     {
         "expense_id": 2,
+        "date": "28-01-2022",
         "amount": 90,
-        "category": "food"
+        "category": "food",
+        "paid_by": "Unknown",
+        "payment_mode": "Unknown"
+    },
+    {
+        "expense_id": 3,
+        "date": "01-07-2003",
+        "amount": 1009,
+        "category": "bill",
+        "paid_by": "kiyo",
+        "payment_mode": "cash"
+    },
+    {
+        "expense_id": 4,
+        "date": "01-09-2023",
+        "amount": 100,
+        "category": "bill",
+        "paid_by": "sangu",
+        "payment_mode": "upi"
+    },
+    {
+        "expense_id": 5,
+        "date": "12-03-2025",
+        "amount": 890,
+        "category": "cloths",
+        "paid_by": "Bhagya",
+        "payment_mode": "cash"
+    },
+    {
+        "expense_id": 6,
+        "date": "04-08-2026",
+        "amount": 899,
+        "category": "highi",
+        "paid_by": "kiyo",
+        "payment_mode": "c card"
     }
 ]

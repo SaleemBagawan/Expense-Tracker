@@ -29,8 +29,11 @@ Please select the operation (1/2/3/4/5/6/7/8) :"""))
         if choice == 1:
             amount = get_int_input('Enter amount:')
             category = get_string_input('Enter Category : ')
+            date = get_string_input('Enter date (dd-mm-yyyy):')
+            paid_by = get_string_input('Who paid ? : ')
+            payment_mode = get_string_input('Mode of payment :')
             try:
-                manager.add_expense(amount, category)
+                manager.add_expense(date,amount, category.lower(),paid_by.lower(),payment_mode.lower())
                 print('Expense added successfully')
                 
             except ValueError as e:
@@ -40,8 +43,7 @@ Please select the operation (1/2/3/4/5/6/7/8) :"""))
             if not data:
                 print('No record found')
                 continue
-            for expense in data:
-                print(f'{expense.expense_id} --> Amount : {expense.amount} | Category : {expense.category}')
+            print_expense_tables(data)  
         elif choice == 3:
             print(f'Total = {manager.get_total()}')
         elif choice == 4:
@@ -50,11 +52,10 @@ Please select the operation (1/2/3/4/5/6/7/8) :"""))
             if not data:
                 print('No data found')
                 continue
-            for expense in data:
-                print(f'{expense.expense_id} --> Amount : {expense.amount} | Category : {expense.category}')
+            print_expense_tables(data)
         elif choice == 5:
             category = get_string_input('Enter the Category: ')
-            data = manager.get_total_by_category(category)
+            data = manager.get_total_by_category(category.lower())
             print(f'The Total amount for category {category} is {data}')
         elif choice == 6:
             expense_id = get_int_input('Enter the id of the expense :')
@@ -70,8 +71,11 @@ Please select the operation (1/2/3/4/5/6/7/8) :"""))
 Edit options
 1. Edit amount
 2. Edit category
-3. Edit both amount and catergory
-Select option (1/2/3) : """))
+3. Edit both amount and category
+4. Edit paid by
+5. Edit payment mode
+6. Edit date
+Select option (1/2/3/4/5/6) : """))
             except ValueError:
                 print('Invalid number:')
                 continue
@@ -82,15 +86,26 @@ Select option (1/2/3) : """))
                     print(message)
                 elif option == 2:
                     category = get_string_input('Enter new category : ')
-                    status, message = manager.edit_expense(expense_id,category=category)
+                    status, message = manager.edit_expense(expense_id,category=category.lower())
                     print(message)
                     
                 elif option == 3:
                     amount = get_int_input('Enter the new amount :')
                     category = get_string_input('Enter new category : ')
-                    status, message = manager.edit_expense(expense_id,amount = amount,category = category)
+                    status, message = manager.edit_expense(expense_id,amount = amount,category = category.lower())
                     print(message)
-
+                elif option == 4:
+                    paid_by = get_string_input('Enter new paid by:')
+                    status , message = manager.edit_expense(expense_id,paid_by=paid_by.lower())
+                    print(message)
+                elif option == 5:
+                    payment_mode = get_string_input('Edit mode:')
+                    status , message = manager.edit_expense(expense_id, payment_mode = payment_mode.lower())
+                    print(message)
+                elif option == 6:
+                    date = get_string_input('Edit date:')
+                    status, message = manager.edit_expense(expense_id, date = date)
+                    print(message)
                 else:
                     print('Error : Invalid option')
             except ValueError as e:
