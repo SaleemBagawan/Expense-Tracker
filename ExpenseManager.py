@@ -1,5 +1,6 @@
 from Expense import *
 from utils import validate_date
+from datetime import datetime
 import json
 
 class ExpenseManager:
@@ -41,12 +42,25 @@ class ExpenseManager:
     def get_expenses_above_limit(self,limit):
         return [e for e in self.expenses if e.amount >= limit]
     
-    def get_total(self):
-        return self.calculate_total(self.expenses)
-    
-    def get_total_by_category(self,category):
+    def get_total(self,filter_type = None, value = None):
+        if not filter_type:
+            return self.calculate_total(self.expenses)
+        if not value:
+                raise ValueError('Invalid input')
+        elif filter_type == 'category':
+            return self.calculate_total(self.get_expenses_by_category(value.lower()))
+        elif filter_type == 'paid_by':
+            return self.calculate_total(self.get_expenses_by_user(value.lower()))
+        elif filter_type == 'payment_mode':
+            pass
+            # return self.calculate_total(self.get_expenses_by_payment_mode(value.lower()))
+        elif filter_type == 'date_range':
+            return self.calculate_total(self.get_expenses_by_date_range(value[0],value[1]))
+            
+
+    def get_expenses_by_category(self,category):
         data = [c for c in self.expenses if c.category == category]
-        return self.calculate_total(data)
+        return data
     
     def get_expense_by_id(self,expense_id):
         for expense in self.expenses:
@@ -128,6 +142,34 @@ class ExpenseManager:
             item['payment_mode'] = "Unknown"
         
         return item
+    
+    def get_expenses_by_date_range(self,start_date,end_date):
+        start_date = validate_date(start_date)
+        if not start_date:
+            raise ValueError('Invalid date')
+        end_date = validate_date(end_date)
+        if not end_date:
+            raise ValueError('Invalid date')
+        start_date = datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.strptime(end_date, "%d-%m-%Y")
+        if start_date > end_date:
+            raise ValueError('Invalid date range')
+        data = []
+        for expense in self.expenses:
+            expense_date = datetime.strptime(expense.date, "%d-%m-%Y")
+            if start_date <= expense_date <= end_date:
+                data.append(expense)
+        return data
+    
+    def get_expenses_by_user(self,paid_by):
+        paid_by.strip()
+        if not paid_by:
+            raise ValueError('Invalid user')
+        data = [c for c in self.expenses if c.paid_by == paid_by]
+        return data
+    
+
+
 
         
     
