@@ -1,4 +1,4 @@
-from ExpenseManager import *
+from expense_manager import *
 from utils import *
 
 

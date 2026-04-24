@@ -1,4 +1,4 @@
-from Expense import *
+from expense import *
 from utils import validate_date
 from datetime import datetime
 import json
@@ -47,15 +47,16 @@ class ExpenseManager:
             return self.calculate_total(self.expenses)
         if not value:
                 raise ValueError('Invalid input')
-        elif filter_type == 'category':
+        if filter_type == 'category':
             return self.calculate_total(self.get_expenses_by_category(value.lower()))
         elif filter_type == 'paid_by':
-            return self.calculate_total(self.get_expenses_by_user(value.lower()))
+            return self.calculate_total(self.get_expenses_by_paid_by(value.lower()))
         elif filter_type == 'payment_mode':
-            pass
-            # return self.calculate_total(self.get_expenses_by_payment_mode(value.lower()))
+            return self.calculate_total(self.get_expenses_by_payment_mode(value.lower()))
         elif filter_type == 'date_range':
             return self.calculate_total(self.get_expenses_by_date_range(value[0],value[1]))
+        else:
+            raise ValueError('Invalid filter')
             
 
     def get_expenses_by_category(self,category):
@@ -161,13 +162,18 @@ class ExpenseManager:
                 data.append(expense)
         return data
     
-    def get_expenses_by_user(self,paid_by):
-        paid_by.strip()
+    def get_expenses_by_paid_by(self,paid_by):
         if not paid_by:
             raise ValueError('Invalid user')
         data = [c for c in self.expenses if c.paid_by == paid_by]
         return data
     
+    def get_expenses_by_payment_mode(self,payment_mode):
+        if not payment_mode:
+            raise ValueError('Invalid payment mode.')
+        data = [c for c in self.expenses if c.payment_mode == payment_mode]
+        return data
+        
 
 
 
