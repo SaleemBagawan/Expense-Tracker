@@ -17,7 +17,8 @@ def main():
 4. Filter expenses
 5. Delete Expense 
 6. Edit expense
-Please select the operation (1/2/3/4/5/6/) :"""))
+7. Sort expenses
+Please select the operation (1/2/3/4/5/6/7) :"""))
         except ValueError:
             print('Please enter valid operation:')
             continue
@@ -195,6 +196,36 @@ Select option (1/2/3/4/5/6) : """))
                     print('Error : Invalid option')
             except ValueError as e:
                 print(e)
+
+
+        elif choice == 7:
+            try:
+                option = int(input("""
+Sort By:
+    1. Amount
+    2. Category
+    3. Date
+Enter selection (1/2/3): """))
+            except ValueError:
+                print('Invalid selection:')
+                continue
+            if option == 1:
+                sort_by = 'amount'
+            elif option == 2:
+                sort_by = 'category'
+            elif option == 3:
+                sort_by = 'date'
+            else:
+                print('Invalid option')
+                continue
+            order = get_string_input('Order (asc/desc):')
+            try :
+                data = manager.get_sorted_expenses(sort_by,order)
+                print_expense_tables(data)
+            except ValueError as e:
+                print(e)
+
+
 
         else:
             break 

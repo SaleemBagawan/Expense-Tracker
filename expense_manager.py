@@ -173,7 +173,28 @@ class ExpenseManager:
             raise ValueError('Invalid payment mode.')
         data = [c for c in self.expenses if c.payment_mode == payment_mode]
         return data
+    
+    def get_sorted_expenses(self, sort_by, order = 'asc'):
+
+        if order not in ['asc','desc']:
+            raise ValueError('Invalid order')
+
+        reverse = True if order == 'desc' else False
+        sort_by = sort_by.lower().strip()
+
+        if sort_by not in ['category','amount' ,'date']:
+            raise ValueError('invalid entry.')
         
+        if sort_by == 'category':
+            key = lambda expense:expense.category.lower()
+        elif sort_by == 'amount':
+            key = lambda expense:expense.amount
+        elif sort_by == 'date':
+            key = lambda expense:datetime.strptime(expense.date,"%d-%m-%Y")
+        
+        return sorted(self.expenses , key = key , reverse=reverse)
+    
+
 
 
 
