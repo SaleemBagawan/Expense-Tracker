@@ -100,7 +100,7 @@ Enter selection (1/2/3): """))
                     raise ValueError('Invalid input')
                 
 
-                data = manager.get_all_expenses(filter_by=filter_by,filter_value=filter_value,sort_by=sort_by,order=order)
+                data = manager.get_expenses(filter_by=filter_by,filter_value=filter_value,sort_by=sort_by,order=order)
                 if not data:
                     print('No record found')
                     continue

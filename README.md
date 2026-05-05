@@ -5,7 +5,7 @@ A command-line based expense tracking system built in Python.
 
 This project allows users to manage expenses with features like:
 - Adding, editing, and deleting expenses
-- Filtering expenses by category, user, payment mode, and date range
+- Filtering and sorting expenses with a generic, chainable system
 - Calculating totals dynamically using a flexible query-like system
 - Persistent storage using JSON
 
@@ -19,7 +19,9 @@ Features:
   - Paid by (user)
   - Payment mode
   - Date range
-- Calculate totals:
+- Sort expenses by amount, category, or date (ascending/descending)
+- Combined filter + sort support
+-- Calculate totals overall and by filters
   - Overall
   - Based on filters
 - Tabular display in CLI
@@ -36,7 +38,6 @@ Features:
 python main.py
 
 ## Future Improvements
-- Sorting (by amount, date)
 - Database integration (replace JSON with SQL)
 - API layer (convert to backend service)
 - UI (web or mobile interface)
