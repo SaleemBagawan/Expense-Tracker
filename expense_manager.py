@@ -29,9 +29,31 @@ class ExpenseManager:
         self.next_id += 1
         self.save_to_file()
 
-    def get_all_expenses(self):
-        datalist = self.expenses.copy()
-        return datalist
+    def get_expenses(self, filter_by = None,filter_value = None,sort_by = None, order= None):
+        data = self.expenses.copy()
+        if filter_by:
+
+            data = self.get_filtered_expenses(filter_by,filter_value,data)
+        
+        if sort_by:
+            data = self.get_sorted_expenses(sort_by,data,order)
+
+        return data
+    
+    def get_filtered_expenses(self,filter_by,filter_value,data):
+
+        if filter_by == 'category':
+            return self.get_expenses_by_category(filter_value.lower(),data)
+        elif filter_by == 'paid_by':
+            return self.get_expenses_by_paid_by(filter_value.lower(),data)
+        elif filter_by == 'payment_mode':
+            return self.get_expenses_by_payment_mode(filter_value.lower(),data)
+        elif filter_by == 'date_range':
+            return self.get_expenses_by_date_range(filter_value[0],filter_value[1],data)
+        elif filter_by == 'above_limit':
+            return self.get_expenses_above_limit(filter_value,data)
+        else:
+            raise ValueError('Invalid filter')
         
     def calculate_total(self,data):
         total = 0
@@ -39,29 +61,30 @@ class ExpenseManager:
             total += expense.amount
         return total
     
-    def get_expenses_above_limit(self,limit):
-        return [e for e in self.expenses if e.amount >= limit]
+    def get_expenses_above_limit(self,limit,data = None):
+        if data is not None:
+            return [e for e in data if e.amount >= limit]
+        else:
+            return [e for e in self.expenses if e.amount >= limit]
     
     def get_total(self,filter_type = None, value = None):
         if not filter_type:
             return self.calculate_total(self.expenses)
         if not value:
                 raise ValueError('Invalid input')
-        if filter_type == 'category':
-            return self.calculate_total(self.get_expenses_by_category(value.lower()))
-        elif filter_type == 'paid_by':
-            return self.calculate_total(self.get_expenses_by_paid_by(value.lower()))
-        elif filter_type == 'payment_mode':
-            return self.calculate_total(self.get_expenses_by_payment_mode(value.lower()))
-        elif filter_type == 'date_range':
-            return self.calculate_total(self.get_expenses_by_date_range(value[0],value[1]))
-        else:
+        if filter_type not in ['category','paid_by','payment_mode','date_range','above_limit']:
             raise ValueError('Invalid filter')
+        if filter_type in ['category','paid_by','payment_mode']:
+            value = value.lower()
+        return self.calculate_total(self.get_expenses(filter_by=filter_type,filter_value=value))
             
 
-    def get_expenses_by_category(self,category):
-        data = [c for c in self.expenses if c.category == category]
-        return data
+    def get_expenses_by_category(self,category,data=None):
+        if data is not None:
+            return [c for c in data if c.category == category]
+        else:
+            return [c for c in self.expenses if c.category == category]
+        
     
     def get_expense_by_id(self,expense_id):
         for expense in self.expenses:
@@ -144,7 +167,7 @@ class ExpenseManager:
         
         return item
     
-    def get_expenses_by_date_range(self,start_date,end_date):
+    def get_expenses_by_date_range(self,start_date,end_date,data = None):
         start_date = validate_date(start_date)
         if not start_date:
             raise ValueError('Invalid date')
@@ -155,29 +178,46 @@ class ExpenseManager:
         end_date = datetime.strptime(end_date, "%d-%m-%Y")
         if start_date > end_date:
             raise ValueError('Invalid date range')
-        data = []
-        for expense in self.expenses:
-            expense_date = datetime.strptime(expense.date, "%d-%m-%Y")
-            if start_date <= expense_date <= end_date:
-                data.append(expense)
-        return data
+        datalist=[]
+        if data is not None:
+            for expense in data:
+                expense_date = datetime.strptime(expense.date, "%d-%m-%Y")
+                if start_date <= expense_date <= end_date:
+                    datalist.append(expense)
+        else:
+            for expense in self.expenses:
+                expense_date = datetime.strptime(expense.date, "%d-%m-%Y")
+                if start_date <= expense_date <= end_date:
+                    datalist.append(expense)
+
+        return datalist
     
-    def get_expenses_by_paid_by(self,paid_by):
+    def get_expenses_by_paid_by(self,paid_by,data = None):
         if not paid_by:
             raise ValueError('Invalid user')
-        data = [c for c in self.expenses if c.paid_by == paid_by]
-        return data
+        if data is not None:
+            return [c for c in data if c.paid_by == paid_by]
+        else:
+            return [c for c in self.expenses if c.paid_by == paid_by]
+
+        
     
-    def get_expenses_by_payment_mode(self,payment_mode):
+    def get_expenses_by_payment_mode(self,payment_mode,data = None):
         if not payment_mode:
             raise ValueError('Invalid payment mode.')
-        data = [c for c in self.expenses if c.payment_mode == payment_mode]
-        return data
+        if data is not None:
+            return [c for c in data if c.payment_mode == payment_mode]
+        else:
+            return [c for c in self.expenses if c.payment_mode == payment_mode]
+
+        
     
-    def get_sorted_expenses(self, sort_by, order = 'asc'):
+    def get_sorted_expenses(self, sort_by,data = None, order = 'asc'):
 
         if order not in ['asc','desc']:
             raise ValueError('Invalid order')
+        if order is None:
+            order = 'asc'
 
         reverse = True if order == 'desc' else False
         sort_by = sort_by.lower().strip()
@@ -191,8 +231,11 @@ class ExpenseManager:
             key = lambda expense:expense.amount
         elif sort_by == 'date':
             key = lambda expense:datetime.strptime(expense.date,"%d-%m-%Y")
-        
-        return sorted(self.expenses , key = key , reverse=reverse)
+
+        if data is not None:
+            return sorted(data, key = key, reverse= reverse)
+        else:
+            return sorted(self.expenses , key = key , reverse=reverse)
     
 
 
