@@ -1,4 +1,4 @@
-from expense import *
+from models.expense import Expense
 from utils import validate_date
 from datetime import datetime
 import json

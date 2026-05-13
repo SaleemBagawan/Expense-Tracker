@@ -39,5 +39,4 @@ python main.py
 
 ## Future Improvements
 - Database integration (replace JSON with SQL)
-- API layer (convert to backend service)
 - UI (web or mobile interface)
