@@ -1,28 +1,20 @@
-class Expense:
+from sqlalchemy import Column, Integer,Float,String
+from database import Base
+
+
+
+class Expense(Base):
+
+    __tablename__ = "expenses"
+
+    expense_id = Column(Integer, primary_key = True, autoincrement = True)
+    date = Column(String , nullable = False)
+    amount = Column(Float ,nullable = False)
+    category = Column(String , nullable = False)
+    paid_by = Column(String, nullable = False)
+    payment_mode = Column(String , nullable = False)
    
-    def __init__(self,expense_id,date,amount,category,paid_by,payment_mode):
-        self.expense_id = expense_id
-        self.amount = amount
-        self.category = category
-        self.date = date
-        self.payment_mode = payment_mode
-        self.paid_by = paid_by
-
-    def to_dict(self):
-        return {
-            "expense_id":self.expense_id,
-            "date":self.date,
-            "amount":self.amount,
-            "category":self.category,
-            "paid_by":self.paid_by,
-            "payment_mode":self.payment_mode
-        }
     
-    @staticmethod
-    def from_dict(data):
-        return Expense(data['expense_id'],data['date'],data['amount'],data['category'],data['paid_by'],data['payment_mode'])
-    
-
 
 
 

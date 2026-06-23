@@ -1,6 +1,7 @@
 from pydantic  import BaseModel
 from typing import Optional
 
+
 class ExpenseCreate(BaseModel):
     amount : float
     category : str

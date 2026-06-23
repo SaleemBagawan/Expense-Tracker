@@ -1,4 +1,4 @@
-# Expense Tracker (CLI)
+# Expense Tracker 
 
 ## Description
 A command-line based expense tracking system built in Python.
