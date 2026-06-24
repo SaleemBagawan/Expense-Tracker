@@ -25,8 +25,11 @@ def print_expense_tables(data):
 
 def validate_date(date):
     from datetime import datetime 
-    try:
-        dt = datetime.strptime(date, "%d-%m-%Y")
-        return dt.strftime("%d-%m-%Y")
-    except ValueError:
-        return False
+    formats = ["%d-%m-%Y","%Y-%m-%d"]
+    for fmt in formats:
+        try:
+            dt = datetime.strptime(date, fmt)
+            return dt.strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return False

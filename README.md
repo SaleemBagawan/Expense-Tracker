@@ -38,5 +38,5 @@ Features:
 python main.py
 
 ## Future Improvements
-- Database integration (replace JSON with SQL)
-- UI (web or mobile interface)
+- PostgreSQL integration (replace SQLite)
+- Frontend (web or mobile)
