@@ -38,7 +38,7 @@ class ExpenseManager:
                 query = query.filter(Expense.amount >= filter_value)
             else:
                 column = getattr(Expense , filter_by)
-                query=query.filter(column == filter_value)
+                query=query.filter(column == filter_value.lower())
         
         if sort_by:
             if order is None:
